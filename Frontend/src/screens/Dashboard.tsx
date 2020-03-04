@@ -28,6 +28,7 @@ const Dashboard: React.FC = () => {
   useEffect(() => {
     api.Whoops.list()
     .then(response => {
+      console.log(response);
       setWhoops(response);
     })
   }, []);
@@ -39,7 +40,7 @@ const Dashboard: React.FC = () => {
           <Paper className={classes.paper}>
             <List>
               {whoops.map(whoop => (
-                <LatestWoops key={whoop.id} whoop={whoop} />
+                <LatestWoops key={whoop.userId} whoop={whoop} />
               ))}
             </List>
           </Paper>

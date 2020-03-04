@@ -1,7 +1,7 @@
 export interface IWhoop {
-    id: number;
+    uNumber: string
+    userId: number;
     name: string;
-    date: Date;
     body: string;
 }
 
