@@ -1,8 +1,9 @@
-import React, { useEffect } from 'react'
+import React, { useState, useEffect } from 'react'
 import { makeStyles, createStyles, Theme } from '@material-ui/core/styles';
 import { Grid, Paper, List } from '@material-ui/core'
 import LatestWoops from 'components/LatestWoops';
 import api from 'utils/api-client';
+import { IWhoop } from 'models/whoop';
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -22,12 +23,12 @@ const useStyles = makeStyles((theme: Theme) =>
 const Dashboard: React.FC = () => {
   const classes = useStyles();
 
-  // const [whoops, setWhoops] = useState([]);
+  const [whoops, setWhoops] = useState<IWhoop[]>([]);
 
   useEffect(() => {
     api.Whoops.list()
     .then(response => {
-      console.log(response.whoops);
+      setWhoops(response);
     })
   }, []);
 
@@ -37,11 +38,9 @@ const Dashboard: React.FC = () => {
         <Grid item xs={12} md={6}>
           <Paper className={classes.paper}>
             <List>
-              <LatestWoops />
-              <LatestWoops />
-              <LatestWoops />
-              <LatestWoops />
-              <LatestWoops />
+              {whoops.map(whoop => (
+                <LatestWoops key={whoop.id} whoop={whoop} />
+              ))}
             </List>
           </Paper>
         </Grid>
