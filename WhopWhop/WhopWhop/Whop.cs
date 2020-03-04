@@ -2,6 +2,7 @@
 
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
@@ -15,12 +16,12 @@ using Newtonsoft.Json;
 
 namespace WhopWhop
 {
-    public class Add
+    public class Whop
     {
         private readonly IConfiguration _configuration;
         private const string _tableName = "Whop";
 
-        public Add(IConfiguration configuration)
+        public Whop(IConfiguration configuration)
         {
             _configuration = configuration;
         }
@@ -62,17 +63,18 @@ namespace WhopWhop
         public  async Task<IActionResult> GetAll([HttpTrigger(AuthorizationLevel.Anonymous, "get", "post", Route = null)] HttpRequest req, ILogger log, ClaimsPrincipal principal)
         {
             var table = TableReference();
-            var result = table.ExecuteQuery(new TableQuery<WhopEntity>()).GetEnumerator();
-
+            
             TableContinuationToken token = null;
             var entities = new List<WhopEntity>();
             do
             {
                 var queryResult = table.ExecuteQuerySegmented(new TableQuery<WhopEntity>(), token);
+                
                 entities.AddRange(queryResult.Results);
                 token = queryResult.ContinuationToken;
             } while (token != null);
-            return new OkObjectResult(entities);
+            var result = entities.Select(x => x.Map()).ToList();// Map();
+            return new OkObjectResult(result);
         }
 
     }
@@ -86,6 +88,20 @@ namespace WhopWhop
             RowKey = id;
         }
         public string Body { get; set; }
+
+    }
+
+    public static class WhopExtensions
+    {
+        public static WhopRequest Map(this WhopEntity entity)
+        {
+            return new WhopRequest
+            {
+                Body = entity.Body,
+                Name = entity.PartitionKey,
+                UserId = entity.RowKey
+            };
+        }
     }
 
     public class WhopRequest
