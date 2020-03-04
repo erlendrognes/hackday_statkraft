@@ -1,4 +1,6 @@
 using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Net.Http.Headers;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
@@ -27,14 +29,17 @@ namespace WhopWhop
             [HttpTrigger(AuthorizationLevel.Anonymous, "get", Route = null)] HttpRequest req,
             ILogger log, ClaimsPrincipal principal)
         {
-            // if (principal.Identity == null)
-            // {
-            //     return new UnauthorizedResult();
-            // }
+            if (principal.Identity == null)
+            {
+                return new UnauthorizedResult();
+            }
             string nameQuery = req.Query["q"];
 
             var client = await GetClient(log);
-            return new ObjectResult("Ok");
+            var stuff = await client.Users.Request(new List<Option>
+                {new QueryOption("$filter", $"startsWith(givenName, '{nameQuery}')")}).GetAsync();
+            
+            return new ObjectResult(stuff.Select(s => new { Name = s.DisplayName, UserPrincipalName = s.UserPrincipalName}));
         }
         
         private async Task<GraphServiceClient> GetClient(ILogger logger)
