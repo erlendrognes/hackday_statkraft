@@ -13,9 +13,9 @@ namespace WhopWhop.Add
 {
     public static class Add
     {
-        [FunctionName("AddNewWhop")]
+        [FunctionName("add")]
         public static async Task<IActionResult> Run(
-            [HttpTrigger(AuthorizationLevel.Anonymous, "post", Route = null)] HttpRequest req,
+            [HttpTrigger(AuthorizationLevel.Anonymous, "post", "get", Route = null)] HttpRequest req,
             ILogger log, ClaimsPrincipal principal)
         {
             log.LogInformation("C# HTTP trigger function processed a request.");
