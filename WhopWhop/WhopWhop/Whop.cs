@@ -47,6 +47,47 @@ namespace WhopWhop
             return new OkObjectResult(data);
         }
 
+
+        [FunctionName("getall")]
+        public async Task<IActionResult> GetAll([HttpTrigger(AuthorizationLevel.Anonymous, "get", "post", Route = null)] HttpRequest req, ILogger log, ClaimsPrincipal principal)
+        {
+            var table = TableReference();
+
+            TableContinuationToken token = null;
+            var entities = new List<WhopEntity>();
+            do
+            {
+                var queryResult = table.ExecuteQuerySegmented(new TableQuery<WhopEntity>(), token);
+
+                entities.AddRange(queryResult.Results);
+                token = queryResult.ContinuationToken;
+            } while (token != null);
+            var result = entities.Select(x => x.Map()).ToList();// Map();
+            return new OkObjectResult(result);
+        }
+
+        [FunctionName("getallforuser")]
+        public async Task<IActionResult> GetWhopsForUser([HttpTrigger(AuthorizationLevel.Anonymous, "get", Route = null)] HttpRequest req, ILogger log, ClaimsPrincipal principal)
+        {
+            string name = req.Query["name"];
+            if (string.IsNullOrWhiteSpace(name))
+                return new BadRequestObjectResult("Name cannot be null");
+
+            var table = TableReference();
+            TableContinuationToken token = null;
+            var entities = new List<WhopEntity>();
+            do
+            {
+                var query = new TableQuery<WhopEntity>().Where(TableQuery.GenerateFilterCondition("PartitionKey", QueryComparisons.Equal,name));
+                var queryResult = table.ExecuteQuerySegmented(query, token);
+
+                entities.AddRange(queryResult.Results);
+                token = queryResult.ContinuationToken;
+            } while (token != null);
+            var result = entities.Select(x => x.Map()).ToList();// Map();
+            return new OkObjectResult(result);
+        }
+
         private CloudTable TableReference()
         {
             string storageConnectionString = _configuration["storageConnectionString"];
@@ -57,24 +98,6 @@ namespace WhopWhop
 
             var table = tableClient.GetTableReference(_tableName);
             return table;
-        }
-
-        [FunctionName("getall")]
-        public  async Task<IActionResult> GetAll([HttpTrigger(AuthorizationLevel.Anonymous, "get", "post", Route = null)] HttpRequest req, ILogger log, ClaimsPrincipal principal)
-        {
-            var table = TableReference();
-            
-            TableContinuationToken token = null;
-            var entities = new List<WhopEntity>();
-            do
-            {
-                var queryResult = table.ExecuteQuerySegmented(new TableQuery<WhopEntity>(), token);
-                
-                entities.AddRange(queryResult.Results);
-                token = queryResult.ContinuationToken;
-            } while (token != null);
-            var result = entities.Select(x => x.Map()).ToList();// Map();
-            return new OkObjectResult(result);
         }
 
     }
