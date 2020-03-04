@@ -34,8 +34,9 @@ namespace WhopWhop
             if (data == null)
                 return new BadRequestObjectResult("Please pass a name on the query string or in the request body");
 
-            var entity = new WhopEntity(data.UserId, data.Name);
+            var entity = new WhopEntity(data.UserId, data.UNumber);
             entity.Body = data.Body;
+            entity.Name = data.Name;
             CloudTable table = TableReference();
 
             await table.CreateIfNotExistsAsync();
@@ -49,7 +50,7 @@ namespace WhopWhop
 
 
         [FunctionName("getall")]
-        public async Task<IActionResult> GetAll([HttpTrigger(AuthorizationLevel.Anonymous, "get", "post", Route = null)] HttpRequest req, ILogger log, ClaimsPrincipal principal)
+        public async Task<IActionResult> GetAll([HttpTrigger(AuthorizationLevel.Anonymous, "get", Route = null)] HttpRequest req, ILogger log, ClaimsPrincipal principal)
         {
             var table = TableReference();
 
@@ -62,7 +63,7 @@ namespace WhopWhop
                 entities.AddRange(queryResult.Results);
                 token = queryResult.ContinuationToken;
             } while (token != null);
-            var result = entities.Select(x => x.Map()).ToList();// Map();
+            var result = entities.Select(x => x.Map()).ToList();
             return new OkObjectResult(result);
         }
 
@@ -78,7 +79,7 @@ namespace WhopWhop
             var entities = new List<WhopEntity>();
             do
             {
-                var query = new TableQuery<WhopEntity>().Where(TableQuery.GenerateFilterCondition("PartitionKey", QueryComparisons.Equal,name));
+                var query = new TableQuery<WhopEntity>().Where(TableQuery.GenerateFilterCondition("PartitionKey", QueryComparisons.Equal, name));
                 var queryResult = table.ExecuteQuerySegmented(query, token);
 
                 entities.AddRange(queryResult.Results);
@@ -105,12 +106,13 @@ namespace WhopWhop
     public class WhopEntity : TableEntity
     {
         public WhopEntity() { }
-        public WhopEntity(string id, string name)
+        public WhopEntity(string id, string unumber)
         {
-            PartitionKey = name;
+            PartitionKey = unumber;
             RowKey = id;
         }
         public string Body { get; set; }
+        public string Name { get; set; }
 
     }
 
@@ -121,8 +123,9 @@ namespace WhopWhop
             return new WhopRequest
             {
                 Body = entity.Body,
-                Name = entity.PartitionKey,
-                UserId = entity.RowKey
+                Name = entity.Name,
+                UserId = entity.RowKey,
+                UNumber = entity.PartitionKey
             };
         }
     }
@@ -130,6 +133,7 @@ namespace WhopWhop
     public class WhopRequest
     {
         public string Name { get; set; }
+        public string UNumber { get; set; }
         public string Body { get; set; }
         public string UserId { get; set; }
     }
