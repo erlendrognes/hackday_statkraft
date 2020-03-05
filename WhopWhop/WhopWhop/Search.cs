@@ -13,7 +13,7 @@ using Microsoft.Graph;
 using Microsoft.Identity.Client;
 using Microsoft.Extensions.Configuration;
 
-namespace WhopWhop.Add
+namespace WhopWhop
 {
     public class Search
     {
