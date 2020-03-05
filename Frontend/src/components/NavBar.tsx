@@ -109,12 +109,10 @@ const NavBar: React.FC = () => {
         return (
           <Grid container alignItems="center">
             <Grid item xs>
-              {options.map((option) => (
                 <span key={option.userPrincipalName}>
                   {option.name}
                 </span>
-              ))}
-              <Typography variant="body2" color="textSecondary">
+                <Typography variant="body2" color="textSecondary">
                 {option.userPrincipalName}
               </Typography>
             </Grid>
