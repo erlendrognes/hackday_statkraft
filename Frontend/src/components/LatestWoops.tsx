@@ -6,7 +6,7 @@ const LatestWoops: React.FC<{whoop: IWhoop}> = ({ whoop }) => {
    return (
     <ListItem>
       <ListItemText
-        primary={whoop.name} secondary={whoop.uNumber} />
+        primary={whoop.name} secondary={whoop.body} />
     </ListItem>
   )
 }

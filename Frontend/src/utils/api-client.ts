@@ -2,7 +2,7 @@ import axios, { AxiosResponse } from 'axios';
 import { IWhoop, IUser } from 'models/whoop';
 
 // axios.defaults.baseURL = process.env.REACT_APP_API_URL;
-axios.defaults.baseURL = process.env.REACT_APP_API_URL;
+axios.defaults.baseURL = "https://whopwhop.azurewebsites.net/api/";
 
 axios.interceptors.request.use(
   config => {
@@ -61,7 +61,7 @@ const Whoops = {
     axios.get('/getall').then(responseBody),
   search: (name: string): Promise<IUser[]> =>
     axios.get('search?q=' + name).then(responseBody),
-  create: (whoop: IWhoop) => requests.post('/', whoop),
+  create: (whoop: IWhoop) => requests.post('/add', whoop),
 };
 
 export default {
