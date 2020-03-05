@@ -2,7 +2,7 @@ import axios, { AxiosResponse } from 'axios';
 import { IWhoop, IUser } from 'models/whoop';
 
 // axios.defaults.baseURL = process.env.REACT_APP_API_URL;
-axios.defaults.baseURL = process.env.REACT_APP_API_URL;
+axios.defaults.baseURL = "https://whopwhop.azurewebsites.net/api";
 
 axios.interceptors.request.use(
   config => {
