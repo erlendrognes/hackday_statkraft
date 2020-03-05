@@ -1,5 +1,6 @@
 
 
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -91,8 +92,8 @@ namespace WhopWhop
 
         private CloudTable TableReference()
         {
-            string storageConnectionString = _configuration["storageConnectionString"];
-
+            string storageConnectionString =
+                "DefaultEndpointsProtocol=https;AccountName=whopwhopstorage;AccountKey=qOnJtBPLDP90KFzOzo44ycw0HJUD+hBy19+k/0eMs+q76oUGtnvz7lGku3h/G6Fi8J4/DTyaw4HAZIQhDA6+NA==;EndpointSuffix=core.windows.net";
             var storageAccount = CloudStorageAccount.Parse(storageConnectionString);
 
             var tableClient = storageAccount.CreateCloudTableClient(new TableClientConfiguration());
@@ -120,14 +121,18 @@ namespace WhopWhop
     {
         public static WhopRequest Map(this WhopEntity entity)
         {
-            return new WhopRequest
+            var map = new WhopRequest
             {
                 Body = entity.Body,
                 Name = entity.Name,
                 UserId = entity.RowKey,
-                UNumber = entity.PartitionKey
+                UNumber = entity.PartitionKey,
+                UtcTick = ToJavaScriptTick(entity.Timestamp.DateTime)
             };
+            return map;
         }
+
+        private static long ToJavaScriptTick(DateTime dateTimeOffset) => (long)dateTimeOffset.Subtract(new DateTime(1970,1,1,0,0,0,DateTimeKind.Utc)).TotalMilliseconds;
     }
 
     public class WhopRequest
@@ -136,5 +141,6 @@ namespace WhopWhop
         public string UNumber { get; set; }
         public string Body { get; set; }
         public string UserId { get; set; }
+        public long UtcTick { get; set; }
     }
 }

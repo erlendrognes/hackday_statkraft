@@ -1,8 +1,9 @@
 export interface IWhoop {
-    uNumber: string | undefined;
+    uNumber: string;
     userId: string;
-    name: string | undefined;
+    name: string;
     body: string;
+    utcTick?: number;
 }
 
 export interface IUser {
