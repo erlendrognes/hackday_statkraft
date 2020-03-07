@@ -15,6 +15,7 @@ import { Grid, Divider } from '@material-ui/core';
 import { IUser, IWhoop } from 'models/whoop';
 import api from 'utils/api-client';
 import { v4 } from 'uuid';
+import AddIcon from '@material-ui/icons/Add';
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -98,8 +99,7 @@ const NavBar: React.FC = () => {
         <Typography variant="h6" className={classes.title}>
           WhoopWhoop
         </Typography>
-        <Button color="inherit" onClick={handleClickOpen}>Create</Button>
-        <Button color="inherit">Login</Button>
+        <Button color="inherit" onClick={handleClickOpen}><AddIcon/> Create</Button>
       </Toolbar>
       <Dialog open={open} onClose={handleClose} aria-labelledby="form-dialog-title">
         <DialogTitle id="form-dialog-title">Create Whoop</DialogTitle>

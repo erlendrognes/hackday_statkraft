@@ -35,6 +35,7 @@ const WhopChart: React.FC<{ whoops: _.Dictionary<IWhoop[]> }> = ({ whoops }) => 
             showInLegend: false,
             type: "column",
             data: data,
+            name: "Whoops"
         }]
 
 

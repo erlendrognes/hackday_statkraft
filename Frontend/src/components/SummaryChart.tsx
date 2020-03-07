@@ -47,7 +47,8 @@ const SummaryChart: React.FC<{ whoops: IWhoop[] }> = ({ whoops }) => {
             showInLegend: false,
             type: "area",
             data: _.map(grouped, g => g.length),
-            color: "#D65A00"
+            color: "#D65A00",
+            name: "Whoop count"
         }]
 
 
