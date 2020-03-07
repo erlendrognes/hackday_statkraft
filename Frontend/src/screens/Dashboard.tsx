@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from 'react'
 import { makeStyles, createStyles, Theme } from '@material-ui/core/styles';
 import { Grid, Paper, List } from '@material-ui/core'
-import LatestWoops from 'components/LatestWoops';
+import LatestWoops from 'components/LatestWoops'; 
+import WhopChart from "components/WhopChart";
 import api from 'utils/api-client';
 import { IWhoop } from 'models/whoop';
 import _ from "lodash";
@@ -51,7 +52,7 @@ const Dashboard: React.FC = () => {
           </Paper>
         </Grid>
         <Grid item xs={12} md={6}>
-          <Paper className={classes.paper}>Data here...</Paper>
+          <WhopChart whoops={_.groupBy(whoops, w => w.uNumber)} />
         </Grid>
         <Grid item xs={12} md={6}>
           <Paper className={classes.paper}>Data here...</Paper>
