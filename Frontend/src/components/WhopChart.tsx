@@ -17,17 +17,24 @@ const WhopChart: React.FC<{ whoops: _.Dictionary<IWhoop[]> }> = ({ whoops }) => 
 
     const options: Highcharts.Options = {
         title: {
-            text: 'My chart'
+            text: 'Whops per person'
         },
         legend: {
             title: {
-                text: "Whoop count",
+                text: "",
             }
         },
+        xAxis: {
+            categories: _.map(whoops, w => w[0].name)
+        },
+        yAxis: {
+            allowDecimals: false,
+            title: {text:""}
+        },
         series: [{
-            
+            showInLegend: false,
             type: "column",
-            data: data
+            data: data,
         }]
 
 

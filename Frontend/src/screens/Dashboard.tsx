@@ -1,33 +1,35 @@
+
 import React, { useState, useEffect } from 'react'
 import { makeStyles, createStyles, Theme } from '@material-ui/core/styles';
-import { Grid, Paper, List } from '@material-ui/core'
-import LatestWoops from 'components/LatestWoops'; 
+import { Grid, Paper, List, Divider } from '@material-ui/core'
+import LatestWoops from 'components/LatestWoops';
 import WhopChart from "components/WhopChart";
 import api from 'utils/api-client';
 import { IWhoop } from 'models/whoop';
 import _ from "lodash";
+import SummaryChart from 'components/SummaryChart';
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
     root: {
       flexGrow: 1,
-      padding: theme.spacing(3),
+      padding: theme.spacing(3)
     },
     paper: {
       padding: theme.spacing(2),
-      textAlign: 'center',
+      textAlign: "center",
 
-      height: "100%",
-    },
-  }),
+      height: "100%"
+    }
+  })
 );
 
 const Dashboard: React.FC = () => {
+
   const classes = useStyles();
 
   const [whoops, setWhoops] = useState<IWhoop[]>([]);
   const [lastFiveWhoops, setLastFiveWhoops] = useState<IWhoop[]>([]);
-
 
   useEffect(() => {
     api.Whoops.list()
@@ -45,25 +47,24 @@ const Dashboard: React.FC = () => {
         <Grid item xs={12} md={6}>
           <Paper className={classes.paper}>
             <List>
-              {_.map(lastFiveWhoops, whoop => (
-                <LatestWoops key={whoop.userId} whoop={whoop} />
+              {_.map(lastFiveWhoops, (whoop: IWhoop) => (
+                <div>
+                  <LatestWoops key={whoop.userId} whoop={whoop} />
+                  <Divider />
+                </div>
               ))}
             </List>
           </Paper>
         </Grid>
         <Grid item xs={12} md={6}>
+          <SummaryChart whoops={whoops} />
+        </Grid>
+        <Grid item xs={12} md={12}>
           <WhopChart whoops={_.groupBy(whoops, w => w.uNumber)} />
         </Grid>
-        <Grid item xs={12} md={6}>
-          <Paper className={classes.paper}>Data here...</Paper>
-        </Grid>
-        <Grid item xs={12} md={6}>
-          <Paper className={classes.paper}>Data here...</Paper>
-        </Grid>
       </Grid>
-
     </div>
-  )
-}
+  );
+};
 
 export default Dashboard;
