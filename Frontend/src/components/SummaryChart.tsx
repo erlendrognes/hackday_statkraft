@@ -1,20 +1,18 @@
-import React, { useState } from 'react'
+import React from 'react'
 import { IWhoop } from 'models/whoop';
-
 import Highcharts from 'highcharts';
 import HighchartsReact from 'highcharts-react-official';
 import _ from 'lodash';
 import moment from 'moment';
 
 const SummaryChart: React.FC<{ whoops: IWhoop[] }> = ({ whoops }) => {
-
-
     let grouped = _.groupBy(whoops, (b) =>
         moment(b.utcTick).startOf('month').format('MMM`YY'));
 
     const options: Highcharts.Options = {
         chart: {
-            type: "area"
+            type: "area",
+            height: 450
         },
         title: {
             text: 'Monthly summary'
@@ -47,7 +45,7 @@ const SummaryChart: React.FC<{ whoops: IWhoop[] }> = ({ whoops }) => {
             showInLegend: false,
             type: "area",
             data: _.map(grouped, g => g.length),
-            color: "#D65A00",
+            color: "#ff6858",
             name: "Whoop count"
         }]
 

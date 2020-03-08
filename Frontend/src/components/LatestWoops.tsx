@@ -1,24 +1,23 @@
 import React from "react";
-import { Typography, ListItem, ListItemText } from "@material-ui/core";
+import { Typography, Card, CardContent } from "@material-ui/core";
 import { IWhoop } from "models/whoop";
 import moment from "moment";
 
 const LatestWoops: React.FC<{ whoop: IWhoop }> = ({ whoop }) => {
-    const header = whoop.name + " - " + moment(whoop.utcTick).format("DD.MM.YYYY - HH:mm");
     return (
-        <ListItem>
-            <ListItemText>
+        <Card style={{ marginBottom: "10px", backgroundColor: "#f1f1f1" }}>
+            <CardContent>
                 <Typography variant="h6" align="center">
-                    {whoop.name}
+                    <u>{whoop.name}</u>
                 </Typography>
                 <Typography variant="body1" align="left">
                     {whoop.body}
                 </Typography>
                 <Typography variant="body2" align="right">
-                    <i>{moment(whoop.utcTick).format("DD.MM.YYYY - HH:mm")}</i>
+                    <i>{moment(whoop.utcTick).format("MMMM Do HH:mm")}</i>
                 </Typography>
-            </ListItemText>
-        </ListItem>
+            </CardContent>
+        </Card>
     );
 };
 

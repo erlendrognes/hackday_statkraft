@@ -11,7 +11,7 @@ const WhopChart: React.FC<{ whoops: _.Dictionary<IWhoop[]> }> = ({ whoops }) => 
         return {
             name: w[0].name != null ? w[0].name : "Unknown",
             y: w.length,
-            color: "#3f51b5"
+            color: "#1fb980"
         };
     });
 

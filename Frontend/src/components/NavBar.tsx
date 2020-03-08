@@ -16,6 +16,7 @@ import { IUser, IWhoop } from 'models/whoop';
 import api from 'utils/api-client';
 import { v4 } from 'uuid';
 import AddIcon from '@material-ui/icons/Add';
+import _ from 'lodash';
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -85,8 +86,8 @@ const NavBar: React.FC = () => {
 
       api.Whoops.search(inputValue)
         .then(response => {
-          console.log(response);
-          setOptions(response);
+          const noAdmin = _.filter(response, r => !r.userPrincipalName.toLowerCase().startsWith("adm"))
+          setOptions(noAdmin);
           setIsSearching(false);
           setLastSearchTerm(inputValue);
         })
@@ -95,11 +96,11 @@ const NavBar: React.FC = () => {
 
   return (
     <AppBar position="static">
-      <Toolbar>
+      <Toolbar >
         <Typography variant="h6" className={classes.title}>
           WhoopWhoop
         </Typography>
-        <Button color="inherit" onClick={handleClickOpen}><AddIcon/> Create</Button>
+        <Button color="inherit" onClick={handleClickOpen}><AddIcon /> Create</Button>
       </Toolbar>
       <Dialog open={open} onClose={handleClose} aria-labelledby="form-dialog-title">
         <DialogTitle id="form-dialog-title">Create Whoop</DialogTitle>
