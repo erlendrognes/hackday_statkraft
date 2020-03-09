@@ -1,13 +1,16 @@
-import React from 'react'
-import { IWhoop } from 'models/whoop';
-import Highcharts from 'highcharts';
-import HighchartsReact from 'highcharts-react-official';
-import _ from 'lodash';
-import moment from 'moment';
+import React from "react";
+import { IWhoop } from "models/whoop";
+import Highcharts from "highcharts";
+import HighchartsReact from "highcharts-react-official";
+import _ from "lodash";
+import moment from "moment";
 
 const SummaryChart: React.FC<{ whoops: IWhoop[] }> = ({ whoops }) => {
-    let grouped = _.groupBy(whoops, (b) =>
-        moment(b.utcTick).startOf('month').format('MMM`YY'));
+    let grouped = _.groupBy(whoops, b =>
+        moment(b.utcTick)
+            .startOf("month")
+            .format("MMM`YY")
+    );
 
     const options: Highcharts.Options = {
         chart: {
@@ -15,7 +18,7 @@ const SummaryChart: React.FC<{ whoops: IWhoop[] }> = ({ whoops }) => {
             height: 450
         },
         title: {
-            text: 'Monthly summary'
+            text: "Monthly summary"
         },
         xAxis: {
             categories: _.map(Object.keys(grouped)),
@@ -27,7 +30,7 @@ const SummaryChart: React.FC<{ whoops: IWhoop[] }> = ({ whoops }) => {
             area: {
                 marker: {
                     enabled: false,
-                    symbol: 'circle',
+                    symbol: "circle",
                     radius: 2,
                     states: {
                         hover: {
@@ -41,24 +44,21 @@ const SummaryChart: React.FC<{ whoops: IWhoop[] }> = ({ whoops }) => {
             allowDecimals: false,
             title: { text: "" }
         },
-        series: [{
-            showInLegend: false,
-            type: "area",
-            data: _.map(grouped, g => g.length),
-            color: "#ff6858",
-            name: "Whoop count"
-        }]
-
-
+        credits: {
+            enabled: false
+        },
+        series: [
+            {
+                showInLegend: false,
+                type: "area",
+                data: _.map(grouped, g => g.length),
+                color: "#ff6858",
+                name: "Whoop count"
+            }
+        ]
     };
 
-
-    return (
-        <HighchartsReact
-            highcharts={Highcharts}
-            options={options} />
-    )
-}
-
+    return <HighchartsReact highcharts={Highcharts} options={options} />;
+};
 
 export default SummaryChart;

@@ -1,12 +1,11 @@
-import React from 'react'
-import { IWhoop } from 'models/whoop';
+import React from "react";
+import { IWhoop } from "models/whoop";
 
-import Highcharts from 'highcharts';
-import HighchartsReact from 'highcharts-react-official';
-import _ from 'lodash';
+import Highcharts from "highcharts";
+import HighchartsReact from "highcharts-react-official";
+import _ from "lodash";
 
 const WhopChart: React.FC<{ whoops: _.Dictionary<IWhoop[]> }> = ({ whoops }) => {
-
     const data = _.map(whoops, w => {
         return {
             name: w[0].name != null ? w[0].name : "Unknown",
@@ -17,11 +16,14 @@ const WhopChart: React.FC<{ whoops: _.Dictionary<IWhoop[]> }> = ({ whoops }) => 
 
     const options: Highcharts.Options = {
         title: {
-            text: 'Whops per person'
+            text: "Whops per person"
+        },
+        credits: {
+            enabled: false
         },
         legend: {
             title: {
-                text: "",
+                text: ""
             }
         },
         xAxis: {
@@ -29,25 +31,19 @@ const WhopChart: React.FC<{ whoops: _.Dictionary<IWhoop[]> }> = ({ whoops }) => 
         },
         yAxis: {
             allowDecimals: false,
-            title: {text:""}
+            title: { text: "" }
         },
-        series: [{
-            showInLegend: false,
-            type: "column",
-            data: data,
-            name: "Whoops"
-        }]
-
-
+        series: [
+            {
+                showInLegend: false,
+                type: "column",
+                data: data,
+                name: "Whoops"
+            }
+        ]
     };
 
-
-    return (
-        <HighchartsReact
-            highcharts={Highcharts}
-            options={options} />
-    )
-}
-
+    return <HighchartsReact highcharts={Highcharts} options={options} />;
+};
 
 export default WhopChart;
