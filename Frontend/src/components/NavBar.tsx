@@ -17,6 +17,7 @@ import api from "utils/api-client";
 import { v4 } from "uuid";
 import AddIcon from "@material-ui/icons/Add";
 import _ from "lodash";
+import whop_transparent from "../img/whop_transparent.png";
 
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
@@ -95,8 +96,7 @@ const NavBar: React.FC = () => {
         <AppBar position="static">
             <Toolbar>
                 <Typography variant="h6" className={classes.title}>
-                    <img src="./whop_transparent.png" style={{ height: "25px" }} />
-                    hoopWhoop
+                    <img src={whop_transparent} style={{ height: "50px" }} />
                 </Typography>
                 <Button color="inherit" onClick={handleClickOpen}>
                     <AddIcon /> Create
