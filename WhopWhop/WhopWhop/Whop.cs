@@ -92,8 +92,8 @@ namespace WhopWhop
 
         private CloudTable TableReference()
         {
-            string storageConnectionString =
-                "DefaultEndpointsProtocol=https;AccountName=whopwhopstorage;AccountKey=qOnJtBPLDP90KFzOzo44ycw0HJUD+hBy19+k/0eMs+q76oUGtnvz7lGku3h/G6Fi8J4/DTyaw4HAZIQhDA6+NA==;EndpointSuffix=core.windows.net";
+            string storageConnectionString = _configuration["storageConnectionString"];
+                
             var storageAccount = CloudStorageAccount.Parse(storageConnectionString);
 
             var tableClient = storageAccount.CreateCloudTableClient(new TableClientConfiguration());
