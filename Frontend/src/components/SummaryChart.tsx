@@ -6,10 +6,11 @@ import _ from "lodash";
 import moment from "moment";
 
 const SummaryChart: React.FC<{ whoops: IWhoop[] }> = ({ whoops }) => {
-    let grouped = _.groupBy(whoops, b =>
+    let orderedWhops = _.orderBy(whoops, w => w.utcTick, "asc");
+    let groupedWhops = _.groupBy(orderedWhops, b =>
         moment(b.utcTick)
-            .startOf("month")
-            .format("MMM`YY")
+            .startOf("day")
+            .valueOf()
     );
 
     const options: Highcharts.Options = {
@@ -18,10 +19,10 @@ const SummaryChart: React.FC<{ whoops: IWhoop[] }> = ({ whoops }) => {
             height: 450
         },
         title: {
-            text: "Monthly summary"
+            text: "Daily summary"
         },
         xAxis: {
-            categories: _.map(Object.keys(grouped)),
+            categories: _.map(Object.keys(groupedWhops), key => moment(+key).format("ddd MMM Do")),
             labels: {
                 rotation: 315
             }
@@ -51,7 +52,7 @@ const SummaryChart: React.FC<{ whoops: IWhoop[] }> = ({ whoops }) => {
             {
                 showInLegend: false,
                 type: "area",
-                data: _.map(grouped, g => g.length),
+                data: _.map(groupedWhops, g => g.length),
                 color: "#ff6858",
                 name: "Whoop count"
             }
